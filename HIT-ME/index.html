@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js">
+			
+		</script>
+	</head>
+	<style>
+		html{
+			background: url(images/bg.gif) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			overflow-y: hidden;
+		}
+		.container {
+			width: 100%;
+			height: 95%;
+			white-space: nowrap;
+		}
+		.sub-container {
+			position:absolute;
+			top:100%;
+			height: 100%;
+			width: calc(100%/3);
+		}
+		.mole{
+			position:absolute;
+			width:30%;
+			height:100%;
+			border-radius: 100px;
+			background-color:rgb(136,0,21);
+			background-image:url("images/mole.png");
+			background-size:100%;
+			background-repeat:no-repeat;
+			background-position-y: 5%;
+			left: 0;
+			right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			z-index:1000;
+		}
+		#c1{
+			left: 0%;
+		}
+		#c2{
+			left: 33.3%;
+		}
+		#c3{
+			left: 66.6%;
+		}
+		.left-ear{
+			height: 5%;
+			width: 26%;
+			border-radius: 100px;
+			background-color:rgb(136,0,21);
+			margin-left:1%;
+			float:left;
+		}
+		.right-ear{
+			height:5%;
+			width:26%;
+			float:right;
+			border-radius: 100px;
+			background-color:rgb(136,0,21);
+		}
+		.blast{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			background-image: url(images/blast.gif);
+			background-repeat: no-repeat;
+			background-size: contain;
+			top: -30%;
+			z-index:2000;
+			display:none;
+		}
+		.modal{
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			width: 20%;
+			height: 20%;
+			transform: translate(-50%, -50%);
+			padding: 5%;
+			text-align: center;
+			background-color: #0b7d7f7d;
+			color: white;
+			border-radius: 50px;
+			font-size: 5vw;
+			font-weight: bold;
+			z-index: 100;
+		}
+		.modal button{
+			background-color: white;
+			width: 44%;
+			height: 3rem;
+			border: none;
+			border-radius: 100px;
+			font-size: 2vw;
+			color: #0b7d7f;
+			cursor: pointer;
+			z-index: 100000;
+		}
+		.modal .modal-score{
+		}
+		.objects{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+		.score-bird{
+			position: fixed;
+			background-repeat: no-repeat;
+		}
+	</style>
+	<script>
+		$(document).ready(function(){
+				var score=0;
+				startGame(score);
+				
+				/*setTimeout(function(){
+					var div = $("<div></div>");
+					div.css("background-image","url(bird.gif)");
+					$(".objects").append(div);
+				}, 3000);*/
+				
+				$('#restart').on('click', function() {
+					score=0;
+					$(".modal").fadeOut(1000);
+					$(".sub-container").css("top","100%");
+					$(".mole").show();
+					$(".score").show();
+					startGame(score);
+				});
+			});	
+			function startGame(score){
+				$(".score span").html(score);
+				$(".sub-container").animate({top:'0%'},5000, function(){
+					blast(score,this);
+				});
+				$(".mole").hover(function(){
+					
+					$(this).parent().animate().stop();
+					$(this).css('background-image','url(images/hurt.png)');
+					$(this).parent().animate({top:'100%'},400, function(){
+						score++;
+						$(".score span").html(score);
+						$(this).children(".mole").css('background-image','url(images/mole.png)');
+						$(this).animate({top:'0%'},2000, function(){
+							blast(score,this);
+						});
+					});
+				});
+			}
+			function blast(score, subContainer){
+				$(subContainer).children(".blast").show();
+				$(subContainer).animate().stop();
+				$(subContainer).children(".blast").animate({top:'-10%'},500, function(){
+					$(".score").hide();
+					$(".blast").hide();
+				});
+				$(".sub-container").animate().stop();
+				$(".mole").fadeOut(800);
+				$(".modal").fadeIn(1000);
+				//var bird = "";
+				//if(score < 10){
+					//bird = "low-score.gif";
+				//}
+				//$(".score-bird").append("<img src="+bird+">");
+				$(".modal span").html(score);
+			}
+	</script>
+	<body>
+		<div class="modal">
+			<div class="score-bird"></div>
+			<div class="modal-score">
+				Score: <span></span></div>
+			<div>
+				<button id="restart">Restart</button>
+			</div>
+		</div>
+		
+		<div class="objects">
+		</div>
+		
+		<div class="score"><H2>Score: <span>0</span></H2></div>
+		
+		<div class="container">
+			<div class="sub-container" id="c1">
+				<div class="blast"></div>
+				<div id="mole1" class="mole">
+					<div class="left-ear"></div>
+					<div class="right-ear"></div>
+				</div>
+			</div>	
+			<div class="sub-container" id="c2">
+				<div class="blast"></div>
+				<div id="mole2" class="mole">
+					<div class="left-ear"></div>
+					<div class="right-ear"></div>
+				</div>
+			</div>
+			<div class="sub-container" id="c3">
+				<div class="blast"></div>
+				<div id="mole3" class="mole">
+					<div class="left-ear"></div>
+					<div class="right-ear"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
